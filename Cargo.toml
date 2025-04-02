@@ -1,0 +1,59 @@
+[package]
+name = "layer8-interceptor-rs"
+version = "0.0.15"
+edition = "2021"
+authors = ["Osoro Bironga <fanosoro@gmail.com>"]
+description = "This repository contains a Rust implementation of the Layer8 Interceptor. Analogous to <https://github.com/globe-and-citizen/layer8-interceptor>"
+repository = "github.com/muse254/layer8-interceptor-rs"
+license = "GNU GPLv2"
+readme = "README.md"
+categories = ["wasm"]
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+web-sys = { version = "0.3.70", features = [
+    "FormData",
+    "File",
+    "Headers",
+    "Response",
+    "ResponseInit",
+    'ReadableStream',
+    'ReadableStreamDefaultReader',
+    'Blob',
+    'FileReaderSync',
+] }
+wasm-bindgen = "0.2"
+base64 = { version = "0.22" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+url = "2"
+wasm-bindgen-futures = "0.4"
+reqwest = "0.12"
+js-sys = "0.3"
+serde-wasm-bindgen = "0.6"
+uuid = { version = "1", features = ["js"] }
+tokio = { version = "1", optional = true, features = ["sync"] }
+layer8-primitives = "0.1.2"
+
+[features]
+default = ["experimental"]
+# ⚠️ Unstable; work on the feature is highly experimental and no guarantees are given
+experimental = ["websocket", "dep:tokio"]
+websocket = [
+    "web-sys/MessageEvent",
+    "web-sys/MessageEventInit",
+    "web-sys/BinaryType",
+    "web-sys/Blob",
+    "web-sys/FileReaderSync",
+    "web-sys/WebSocket",
+    "web-sys/Window",
+]
